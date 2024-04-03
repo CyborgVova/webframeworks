@@ -48,6 +48,7 @@ func main() {
 	// log.Fatal(http.ListenAndServe("localhost:8080", mw.Logging(mux)))
 
 	http.Handle("/hello", mw.Logging(http.HandlerFunc(Hello)))
+	http.Handle("/auth", mw.Logging(mw.Authorization(http.HandlerFunc(Hello))))
 
 	fmt.Println("Starting server localhost:8080 ...")
 	log.Fatal(http.ListenAndServe("localhost:8080", nil))
