@@ -45,7 +45,7 @@ func main() {
 	router.StrictSlash(true)
 
 	router.HandleFunc("/hello", Hello).Methods("GET", "POST")
-	// router.Handle("/hello2", mw.Logging(http.HandlerFunc(Hello))).Methods("GET")
+	router.Handle("/auth", mw.Authorization(http.HandlerFunc(Hello))).Methods("POST")
 
 	router.Use(mw.Logging)
 
