@@ -28,12 +28,10 @@ func Hello(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println("error reading body request", err)
 		}
-		name := &struct {
-			Name string `json:"name"`
-		}{}
-		json.Unmarshal(b, name)
-		if name.Name != "" {
-			fmt.Fprintf(w, "Hello, %s\n", name.Name)
+		var user map[string]interface{}
+		json.Unmarshal(b, &user)
+		if name, ok := user["name"].(string); ok {
+			fmt.Fprintf(w, "Hello, %s\n", name)
 			return
 		}
 		log.Println("empty request")
