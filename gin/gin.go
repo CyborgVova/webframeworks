@@ -4,27 +4,42 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	mw "webframeworks/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Hello(c *gin.Context) {
 	c.Header("Content-type", "application/json")
-	name, ok := c.GetQuery("name")
-	if !ok {
-		c.Status(http.StatusBadRequest)
-		fmt.Fprintln(c.Writer, "Hello, Stranger")
-		return
+	switch c.Request.Method {
+	case http.MethodGet:
+		name, ok := c.GetQuery("name")
+		if !ok {
+			c.Status(http.StatusBadRequest)
+			fmt.Fprintln(c.Writer, "Hello, Stranger")
+			return
+		}
+		fmt.Fprintf(c.Writer, "Hello, %s\n", name)
+	case http.MethodPost:
+		fmt.Fprintf(c.Writer, "Hello, %s\n", c.MustGet(gin.AuthUserKey).(string))
 	}
-	fmt.Fprintf(c.Writer, "Hello, %s\n", name)
 }
 
 func main() {
 	gin.SetMode(gin.ReleaseMode)
+	// router := gin.New()
+
 	router := gin.Default()
+	router.POST("/auth", gin.BasicAuth(mw.Auth), Hello)
 
 	router.Handle("GET", "/hello", Hello)
-	router.POST("/auth", Hello)
+
+	// authorized := router.Group("/")
+	// authorized.Use(gin.BasicAuth(mw.Auth))
+	// authorized.Use(gin.Logger())
+	// authorized.Use(gin.Recovery())
+
+	// authorized.POST("/auth", Hello)
 
 	fmt.Println("Starting server on localhost:8080 ...")
 	log.Fatal(router.Run("localhost:8080"))
