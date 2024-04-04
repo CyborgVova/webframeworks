@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	mw "webframeworks/middleware"
+
+	"webframeworks/storage"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,7 +31,7 @@ func main() {
 	// router := gin.New()
 
 	router := gin.Default()
-	router.POST("/auth", gin.BasicAuth(mw.Auth), Hello)
+	router.POST("/auth", gin.BasicAuth(storage.Auth), Hello)
 
 	router.Handle("GET", "/hello", Hello)
 

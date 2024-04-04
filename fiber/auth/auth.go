@@ -7,8 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var Auth = map[string]string{"vova": "vovapass", "seva": "sevapass"}
-
 func GetBasicAuth(f *fiber.Ctx) (string, string, bool) {
 	auth := f.Get("Authorization")
 	if len(auth) <= 6 {

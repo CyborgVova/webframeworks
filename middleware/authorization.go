@@ -3,9 +3,8 @@ package middleware
 import (
 	"log"
 	"net/http"
+	"webframeworks/storage"
 )
-
-var Auth = map[string]string{"vova": "vovapass", "seva": "sevapass"}
 
 func Authorization(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -16,7 +15,7 @@ func Authorization(next http.Handler) http.Handler {
 			return
 		}
 
-		if pass, ok := Auth[username]; !ok || pass != password {
+		if pass, ok := storage.Auth[username]; !ok || pass != password {
 			w.WriteHeader(http.StatusUnauthorized)
 			log.Println("error authorization")
 			return

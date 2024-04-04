@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gofiber/fiber/v2"
 	"webframeworks/fiber/auth"
+	"webframeworks/storage"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 func Logging(f *fiber.Ctx) error {
@@ -18,7 +20,7 @@ func Authorization(f *fiber.Ctx) error {
 	if !ok {
 		f.SendStatus(http.StatusUnauthorized)
 	}
-	if auth.Auth[username] != password {
+	if storage.Auth[username] != password {
 		f.SendStatus(http.StatusUnauthorized)
 		return nil
 	}
