@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	fiber "github.com/gofiber/fiber/v2"
@@ -13,12 +12,9 @@ func Hello(f *fiber.Ctx) error {
 }
 
 func main() {
-	app := fiber.New(fiber.Config{
-		ServerHeader: "Fiber Framework",
-	})
+	app := fiber.New()
 
 	app.Get("/hello", Hello)
 
-	fmt.Println("Starting server on localhost:8080 ...")
 	log.Fatal(app.Listen("localhost:8080"))
 }
